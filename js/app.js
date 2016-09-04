@@ -35,9 +35,9 @@ $(document).ready(function() {
 
 var foursquareApi = {
     clientId: "DEIVBOHXOPG2VSJ120LGGGMOC4QI033CJ31Z5ZVCZXFI4D3Z",
-    clientSecret: "TSVFAO2OZRI0QEVTIGEUOEMH20ZEUDNX1HYCJYXUDUIIUEJP",
-    oauth_token:"WJT0RDUQF2W55AZHKHL0ZRF1GSCANDNOUMV53RQFLCX55DE4",
-    code: "HQEV3FJDFEZXOUHWSATSNUNH1ZF5NNUFAHBCY0Y3ZPJ0RRNM",
+    clientSecret: "",
+    oauth_token:"",
+    code: "",
     redirectUrl : "http://localhost/DistanceCalculator/",
     authorize: function(){
         var url = "https://foursquare.com/oauth2/access_token";
