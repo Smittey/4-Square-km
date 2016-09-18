@@ -7,7 +7,7 @@ A project which maps your Foursquare checkins as connected points, and provides 
 
 
 
- ##Bugs / Issues
+##Bugs / Issues
 
 Found an issue with this site? Open a new issue here
 
