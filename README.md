@@ -9,7 +9,7 @@ A project which maps your Foursquare checkins as connected points, and provides 
 
 ##Bugs / Issues
 
-Found an issue with this site? Open a new issue (here)[https://github.com/Smittey/Jetsettr/issues]
+Found an issue with this site? Open a new issue [here](https://github.com/Smittey/Jetsettr/issues)
 
 
 
