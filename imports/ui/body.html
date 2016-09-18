@@ -1,0 +1,81 @@
+<body>
+    <div class="top-bar fixed-top" id="main-menu">
+        <div class="top-bar-left">
+            <ul class="dropdown menu" data-dropdown-menu>
+            
+
+                <li class="menu-text"><a href='http://localhost:3000'>4²km</a></li>
+                <!--<li class="menu-text cookie-test"><a href='#'>Test Cookie</a></li>-->
+            </ul>
+        </div>
+
+
+
+
+
+        {{#if connectedToFoursquare}}
+
+                <div class="top-bar-right">
+
+                    <a class="display-checkins btn btn-block btn-social btn-foursquare">
+                        <span class="fa fa-foursquare"></span>
+                        Display Checkins
+                    </a>
+
+                </div>
+
+            {{else}}
+                <!--<div class="top-bar-right">-->
+
+                    <!--<ul class="menu" data-responsive-menu="drilldown medium-dropdown">-->
+                        <!--<li class="has-submenu">-->
+                            <!--<a href="#">Account</a>-->
+                            <!--<ul class="submenu menu vertical" data-submenu>-->
+                                <!--<li><a href="#">Settings</a></li>-->
+                                <!--<li><a href="#">Log out</a></li>-->
+                            <!--</ul>-->
+                        <!--</li>-->
+
+                    <!--</ul>-->
+                <!--</div>-->
+
+                <div class="top-bar-right">
+
+                    <a class="foursquare-login btn btn-block btn-social btn-foursquare">
+                        <span class="fa fa-foursquare"></span>
+                        Connect with Foursquare
+                    </a>
+
+                </div>
+            {{/if}}
+
+
+
+    </div>
+
+    {{> map}}
+
+
+    <div class="top-bar fixed-bottom" id="main-menu">  
+        <div class="top-bar-left">
+            <ul class="menu" data-responsive-menu="drilldown medium-dropdown">
+               <li>Distance: <p id="distanceTotal">0</p></li>
+               <li>Countries: <p id="countryTotal">0</p></li>
+               <li>Checkins: <p id="checkinTotal">0</p></li>
+            </ul>
+        </div>
+        
+        <div class="top-bar-right">
+            <ul class="dropdown menu" data-dropdown-menu>
+                <li class="menu">Powered by<a href='https://foursquare.com/' target='_blank'><img src='/images/foursquare-logo.jpg'></a></li>
+            </ul>
+        </div>
+    </div>
+    
+    
+</body>
+
+
+<template name="map">
+   <div id="mapid"></div>
+</template>

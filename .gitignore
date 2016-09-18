@@ -1,0 +1,10 @@
+config.json
+
+node_modules/
+npm-debug.log
+
+.idea/*
+
+typings/*
+
+.meteor/local/

@@ -1,0 +1,132 @@
+body {
+    margin:0;
+    padding:0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Open Sans',sans-serif;
+    color: #FFFFFF;
+    background-color: #004870;
+}
+
+#mapid { 
+    position:fixed; 
+    top:50px; 
+    bottom:50px; 
+    width:100%; 
+}
+
+
+.title-bar {
+    background: #333;
+    padding: 0.9rem; 
+}
+
+.top-bar {
+    background: #333; 
+}
+  
+.top-bar ul {
+    background: #333; 
+}
+
+.top-bar ul li {
+    background: #333; 
+}
+  
+.top-bar ul li a {
+    color: #fff; 
+}
+
+.menu-text {
+    color: #fff; 
+}
+    
+@media only screen and (max-width: 40em) {
+    .menu-text {
+        display: none !important; 
+    } 
+}
+
+
+  
+.fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+}
+
+.fixed-top {
+    position: relative;    
+    top: 0;
+    width: 100%;
+    height: 50px;
+}
+
+.top-bar-middle {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    display: inline-block
+}
+    
+.top-bar ul li, .top-bar ul li p {
+    color: #fff;
+    padding: 0.7rem 1rem;
+    line-height: 1;
+    display: inline-block
+}
+
+.top-bar ul li p,  .top-bar ul li a {
+    display: inline
+}
+ 
+.top-bar ul li img {
+
+    height: 1em;
+}
+
+/*
+.menu .foursquare-login {
+    padding: 0 !important;
+    
+        display: block;
+    line-height: 1;
+}*/
+
+
+
+#overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background: #000;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+        /*background-image: url('http://bit.ly/pMtW1K');
+        background-repeat: no-repeat;
+        background-position: center center;*/
+
+}
+
+   
+#map {
+    min-height: 350px;
+    min-width: 100%;
+}
+
+.leaflet-popup-content {
+    color: #333;
+}
+
+
+
+
+.leaflet-marker-icon.countryMarker {
+    -webkit-mask: url(https://unpkg.com/leaflet@1.0.0-rc.3/dist/images/marker-icon.png) center;
+
+    width: 25px;
+    height: 41px;
+}
