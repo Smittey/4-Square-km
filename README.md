@@ -7,13 +7,13 @@ A project which maps your Foursquare checkins as connected points, and provides 
 
 
 
- <i class="icon-bug"></i> **Bugs / Issues**
+ ##Bugs / Issues
 
 Found an issue with this site? Open a new issue here
 
 
 
 
- <i class="icon-file"></i> **Copyright and License**
+##Copyright and License
 
 Code released under the [Apache 2.0 license](https://github.com/Smittey/Jetsettr/blob/master/LICENSE).
