@@ -72,12 +72,14 @@ Template.map.onRendered(function(){
   
     L.Icon.Default.imagePath = Meteor.settings.public.leaflet.defaultMarker;
 
-    mapVars.markersGroup = new L.LayerGroup();
+    //mapVars.markersGroup = new L.LayerGroup();
+    mapVars.markersGroup = new L.markerClusterGroup();
 
-    mapVars.mymap = L.map('mapid', {
+    mapVars.mymap = L.map('mapid'/*, {
         layers: [mapVars.markersGroup]
-    }).setView([51.505, -0.09], 13);
-    
+    }*/).setView([51.505, -0.09], 13);
+
+
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -101,6 +103,10 @@ Template.body.events({
     'click .display-checkins': function(){
 
         if(cookies.has('authToken')) {
+
+            //Clear layers and reset variables in case the user clicks the display check-ins button again
+            mapVars.markersGroup.clearLayers();
+            mapVars.totalDistance = 0, mapVars.totalCheckinCount = 0, mapVars.countriesArr = [], mapVars.countriesTotal = 0, mapVars.latlngArr = [], mapVars.previousLocation = null, mapVars.currentLocation = null;
 
             latestApiVersion = getLatestVersion();
             foursquareApi.init();
@@ -182,57 +188,75 @@ foursquareApi = {
                 //console.log(value);
                 //console.log(value.venue.name + ' - (' + value.venue.location.lat + ', ' + value.venue.location.lng + ')');
 
-                mapVars.currentLocation = [value.venue.location.lat, value.venue.location.lng];
-                mapVars.latlngArr.push(mapVars.currentLocation);
+                //To cover the rare case where foursquare has a malformed checkin with no 'venue' object
+                if(value.hasOwnProperty('venue')) {
 
-                var countryCode = value.venue.location.cc.toLowerCase();
-                var countryCodeUrl = "http://www.geonames.org/flags/x/" + countryCode + ".gif";
+                    mapVars.currentLocation = [value.venue.location.lat, value.venue.location.lng];
+                    mapVars.latlngArr.push(mapVars.currentLocation);
 
-                var countryIcon = L.icon({
-                    iconUrl: "http://www.geonames.org/flags/x/" + countryCode + ".gif",
-                    iconAnchor: [12.5, 41]
-                });
+                    var countryCode = value.venue.location.cc.toLowerCase();
+                    var countryCodeUrl = "http://www.geonames.org/flags/x/" + countryCode + ".gif";
 
-
-                var marker = L.marker(mapVars.currentLocation, {icon: countryIcon}).addTo(mapVars.markersGroup);
-
-
-                $(marker._icon).addClass('countryMarker');
-                 marker.bindPopup(value.venue.name).openPopup();
+                    var countryIcon = L.icon({
+                        iconUrl: "http://www.geonames.org/flags/x/" + countryCode + ".gif",
+                        iconAnchor: [12.5, 41]
+                    });
 
 
+                    var marker = L.marker(mapVars.currentLocation).addTo(mapVars.markersGroup);
 
-                if (mapVars.previousLocation != null) {
-                    var polyline = L.polyline([mapVars.previousLocation, mapVars.currentLocation],
-                        {
-                            color: 'red',
-                            weight: 2,
-                            opacity: 0.8,
-                            smoothFactor: 1
+                    //var marker = L.marker(mapVars.currentLocation, {icon: countryIcon}).addTo(mapVars.markersGroup);
 
-                        }).addTo(mapVars.markersGroup);
+                    //$(marker._icon).addClass('countryMarker');
+                    marker.bindPopup(value.venue.name).openPopup();
 
-                    $('#distanceTotal').text(calculateDistance(mapVars.previousLocation, mapVars.currentLocation).toLocaleString() + "km");
+
+                    if (mapVars.previousLocation != null) {
+                        var polyline = L.polyline([mapVars.previousLocation, mapVars.currentLocation],
+                            {
+                                color: 'red',
+                                weight: 2,
+                                opacity: 0.8,
+                                smoothFactor: 1
+
+                            }).addTo(mapVars.markersGroup);
+
+                        $('#distanceTotal').text(calculateDistance(mapVars.previousLocation, mapVars.currentLocation).toLocaleString() + "km");
+                    }
+
+                    mapVars.totalCheckinCount += 1;
+                    $('#checkinTotal').text(mapVars.totalCheckinCount);
+
+                    checkCountry(value.venue.location.country)
+                    /*if(checkCountry(value.venue.location.country)) {
+                     var marker = L.marker(mapVars.currentLocation, {icon: countryIcon}).addTo(mapVars.markersGroup);
+
+
+                     $(marker._icon).addClass('countryMarker');
+                     marker.bindPopup(value.venue.name).openPopup();
+                     }*/
+
+                    $('#countryTotal').text(mapVars.countriesTotal);
+
+
+                    mapVars.previousLocation = mapVars.currentLocation;
                 }
-
-                mapVars.totalCheckinCount += 1;
-                $('#checkinTotal').text(mapVars.totalCheckinCount);
-
-
-                $('#countryTotal').text(checkCountry(value.venue.location.country));
-
-                mapVars.previousLocation = mapVars.currentLocation;
 
             });
 
             console.log(mapVars.countriesArr);
 
-            var bounds = new L.LatLngBounds(mapVars.latlngArr);
-            mapVars.mymap.fitBounds(bounds);
+
 
             if(mapVars.totalCheckinCount < totalCheckins) {
                 foursquareApi.list((offsetStart + 250), 250);
             } else {
+
+                mapVars.mymap.addLayer(mapVars.markersGroup);
+
+                var bounds = new L.LatLngBounds(mapVars.latlngArr);
+                mapVars.mymap.fitBounds(bounds);
+
                 $('#overlay').remove();
             }
 
@@ -285,9 +309,11 @@ function checkCountry(country) {
     if(mapVars.countriesArr.indexOf(country) == -1 && country != undefined) {
         mapVars.countriesArr.push(country);
         mapVars.countriesTotal += 1;
+
+        return true;
     }
     
-    return mapVars.countriesTotal;        
+    return false;
 }
 
 function getCode() {

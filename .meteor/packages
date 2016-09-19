@@ -30,3 +30,5 @@ http
 session
 
 ostrio:cookies
+
+herrhelms:meteor-leaflet-markercluster
