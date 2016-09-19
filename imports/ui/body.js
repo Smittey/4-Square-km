@@ -112,11 +112,11 @@ Template.body.events({
             foursquareApi.init();
 
         }
-    }
-    /*'click .cookie-test': function(){
+    },
+    'click .home': function(){
+        window.open(Meteor.absoluteUrl(), '_self');
 
-        Session.set('authToken', "fhsrpoesrij");
-    }*/
+    }
 });
 
 
