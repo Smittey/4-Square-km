@@ -224,8 +224,7 @@ foursquareApi = {
                         $('#distanceTotal').text(calculateDistance(mapVars.previousLocation, mapVars.currentLocation).toLocaleString() + "km");
                     }
 
-                    mapVars.totalCheckinCount += 1;
-                    $('#checkinTotal').text(mapVars.totalCheckinCount);
+                   
 
                     checkCountry(value.venue.location.country)
                     /*if(checkCountry(value.venue.location.country)) {
@@ -236,11 +235,15 @@ foursquareApi = {
                      marker.bindPopup(value.venue.name).openPopup();
                      }*/
 
-                    $('#countryTotal').text(mapVars.countriesTotal);
+                    
 
 
                     mapVars.previousLocation = mapVars.currentLocation;
                 }
+				
+				mapVars.totalCheckinCount += 1;
+				$('#checkinTotal').text(mapVars.totalCheckinCount);
+				$('#countryTotal').text(mapVars.countriesTotal);
 
             });
 
