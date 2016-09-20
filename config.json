@@ -1,17 +1,19 @@
 {
   "public": {
     "foursquare" : {
-        "clientId": "",
-        "redirectUrl": ""
+      "clientId": "",
+      "redirectUrl": ""
     },
     "leaflet" : {
-        "publicKey" : "",
-        "defaultMarker" : "" 
+      "publicKey" : "",
+      "mapId" : "",
+      "tileUrl" : "",
+      "defaultMarker" : ""
     }
   },
   "private": {
     "foursquare" : {
-        "clientSecret": ""
+      "clientSecret": ""
     }
   }
 }   
