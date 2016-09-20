@@ -226,7 +226,7 @@ foursquareApi = {
 
                    
 
-                    checkCountry(value.venue.location.country)
+                    checkCountry(value.venue.location.country);
                     /*if(checkCountry(value.venue.location.country)) {
                      var marker = L.marker(mapVars.currentLocation, {icon: countryIcon}).addTo(mapVars.markersGroup);
 
