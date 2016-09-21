@@ -1,5 +1,3 @@
-//import '/imports/ui/body.html';
-
 import { Meteor } from 'meteor/meteor';
 import { Cookies } from 'meteor/ostrio:cookies';
 
@@ -16,7 +14,6 @@ Meteor.methods({
         
         var result = HTTP.call('GET', url);
         return result.data.access_token;
-    
     }
    
 });
