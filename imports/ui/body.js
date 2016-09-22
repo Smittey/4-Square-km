@@ -68,39 +68,17 @@ Template.map.onRendered(function(){
         navigator.geolocation.getCurrentPosition(function(position) {
 
             currentLocation = [position.coords.latitude, position.coords.longitude];
-
-            mapVars.mymap = L.map('mapid').setView(currentLocation, 13);
-
-            L.tileLayer(Meteor.settings.public.leaflet.tileUrl + '?access_token={accessToken}', {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                maxZoom: 18,
-                id: Meteor.settings.public.leaflet.mapId,
-                accessToken: Meteor.settings.public.leaflet.publicKey,
-            }).addTo(mapVars.mymap);
+            
+            setMap(currentLocation);
 
         }, function(error) {
 
-            mapVars.mymap = L.map('mapid').setView([51.505, -0.09], 4);
-
-            L.tileLayer(Meteor.settings.public.leaflet.tileUrl + '?access_token={accessToken}', {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                maxZoom: 18,
-                id: Meteor.settings.public.leaflet.mapId,
-                accessToken: Meteor.settings.public.leaflet.publicKey,
-            }).addTo(mapVars.mymap);
-
+            setMap();
 
         },{timeout:5000});
-    }else{
+    }else {
 
-        mapVars.mymap = L.map('mapid').setView([51.505, -0.09], 4);
-
-        L.tileLayer(Meteor.settings.public.leaflet.tileUrl + '?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            maxZoom: 18,
-            id: Meteor.settings.public.leaflet.mapId,
-            accessToken: Meteor.settings.public.leaflet.publicKey,
-        }).addTo(mapVars.mymap);
+        setMap();
     }
 
 
@@ -167,6 +145,23 @@ var getCurrentLocation = {
 
 
 };
+
+function setMap(location) {
+
+    if(location != undefined) {
+        mapVars.mymap = L.map('mapid').setView(location, 13);
+
+    } else {
+        mapVars.mymap = L.map('mapid').setView([51.505, -0.09], 4);
+    }
+
+    L.tileLayer(Meteor.settings.public.leaflet.tileUrl + '?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18,
+        id: Meteor.settings.public.leaflet.mapId,
+        accessToken: Meteor.settings.public.leaflet.publicKey,
+    }).addTo(mapVars.mymap);
+}
 
 function getLatestVersion() {
 
