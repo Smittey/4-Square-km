@@ -68,7 +68,7 @@ Template.map.onRendered(function(){
         navigator.geolocation.getCurrentPosition(function(position) {
 
             currentLocation = [position.coords.latitude, position.coords.longitude];
-            
+
             setMap(currentLocation);
 
         }, function(error) {
