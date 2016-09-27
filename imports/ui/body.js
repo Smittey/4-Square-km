@@ -32,10 +32,10 @@ Template.body.onCreated(function () {
    }
 
    //If the user has previously used the app, use the saved cookie holding the auth token
-   if(!cookies.has('authToken') && mapVars.code != null) {
+   if(!cookies.has('authToken') && mapVars.code != undefined) {
        //Get auth token using the code obtained from the URL
        getAuthToken();
-   } else {
+   } else if(cookies.has('authToken')) {
        Session.set('authToken', cookies.get('authToken'));
    }
 
