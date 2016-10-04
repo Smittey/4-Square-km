@@ -8,10 +8,10 @@ body {
     background-color: #004870;
 }
 
-#mapid { 
+#mapid {
     position:fixed; 
-    top:50px; 
-    bottom:50px; 
+    top:50px;
+    bottom:50px;
     width:100%; 
 }
 
@@ -112,16 +112,10 @@ body {
 }
 
    
-#map {
-    min-height: 350px;
-    min-width: 100%;
-}
 
 .leaflet-popup-content {
     color: #333;
 }
-
-
 
 
 .leaflet-marker-icon.countryMarker {

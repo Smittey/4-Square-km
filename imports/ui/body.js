@@ -51,7 +51,9 @@ Template.body.helpers({
 });
 
 
-Template.map.onRendered(function(){ 
+Template.map.onRendered(function(){
+
+
 
     L.Icon.Default.imagePath = Meteor.settings.public.leaflet.defaultMarker;
 
@@ -155,12 +157,16 @@ function setMap(location) {
         mapVars.mymap = L.map('mapid').setView([51.505, -0.09], 4);
     }
 
+
     L.tileLayer(Meteor.settings.public.leaflet.tileUrl + '?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18,
         id: Meteor.settings.public.leaflet.mapId,
         accessToken: Meteor.settings.public.leaflet.publicKey,
     }).addTo(mapVars.mymap);
+
+    mapVars.mymap.addLayer(mapVars.markersGroup);
+
 }
 
 function getLatestVersion() {

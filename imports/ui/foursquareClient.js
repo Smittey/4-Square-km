@@ -42,7 +42,7 @@ foursquareApi = {
 
         this.getJson(url, function (data) {
 
-            //console.log("getting data ", data);
+            console.log("getting data ", data);
 
             var setOfCheckins = data.response.checkins.items;
             var totalCheckins = data.response.checkins.count;
@@ -55,6 +55,8 @@ foursquareApi = {
                     mapVars.currentLocation = [value.venue.location.lat, value.venue.location.lng];
                     mapVars.latlngArr.push(mapVars.currentLocation);
 
+                    //console.log(JSON.stringify(value.venue.categories));
+
                     var countryCode = value.venue.location.cc.toLowerCase();
                     var countryCodeUrl = "http://www.geonames.org/flags/x/" + countryCode + ".gif";
 
@@ -64,20 +66,34 @@ foursquareApi = {
                     });
 
 
-                    var marker = L.marker(mapVars.currentLocation).addTo(mapVars.markersGroup);
+                    //var marker = L.marker(mapVars.currentLocation).addTo(mapVars.markersGroup);
 
-                    marker.bindPopup(value.venue.name).openPopup();
+                    //marker.bindPopup(value.venue.name).openPopup();
 
 
                     if (mapVars.previousLocation != null) {
-                        var polyline = L.polyline([mapVars.previousLocation, mapVars.currentLocation],
+
+
+                        var control = L.Routing.control({
+                            waypoints: [
+                                L.latLng(mapVars.previousLocation[0], mapVars.previousLocation[1]),
+                                L.latLng(mapVars.currentLocation[0], mapVars.currentLocation[1])
+                            ],
+                            geocoder: L.Control.Geocoder.nominatim(),
+                            showAlternatives: false,
+                            router: L.Routing.mapbox('pk.eyJ1Ijoic21pdHRleSIsImEiOiJjaW80dGlsc3IwMDNvdXNrbmRtM3Zmd3J6In0.z0r08XD3wXm6AjIdNbwlKg')
+                        }).addTo(mapVars.mymap);
+
+                        L.Routing.errorControl(control).addTo(mapVars.mymap);
+
+                        /*var polyline = L.polyline([mapVars.previousLocation, mapVars.currentLocation],
                             {
                                 color: 'red',
                                 weight: 2,
                                 opacity: 0.8,
                                 smoothFactor: 1
 
-                            }).addTo(mapVars.markersGroup);
+                            }).addTo(mapVars.markersGroup);*/
 
                         $('#distanceTotal').text(calculateDistance(mapVars.previousLocation, mapVars.currentLocation).toLocaleString() + "km");
                     }
@@ -94,17 +110,18 @@ foursquareApi = {
             });
 
 
-            if(mapVars.totalCheckinCount < totalCheckins) {
-                foursquareApi.list((offsetStart + 250), 250);
-            } else {
 
-                mapVars.mymap.addLayer(mapVars.markersGroup);
+            // if(mapVars.totalCheckinCount < totalCheckins) {
+            //     foursquareApi.list((offsetStart + 250), 250);
+            // } else {
+
+                //mapVars.mymap.addLayer(mapVars.markersGroup);
 
                 var bounds = new L.LatLngBounds(mapVars.latlngArr);
                 mapVars.mymap.fitBounds(bounds);
 
                 $('#overlay').remove();
-            }
+           // }
 
         });
     },
