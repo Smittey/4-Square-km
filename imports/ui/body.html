@@ -40,9 +40,33 @@
     <div class="top-bar fixed-bottom" id="main-menu">  
         <div class="top-bar-left">
             <ul class="menu" data-responsive-menu="drilldown medium-dropdown">
-               <li>Distance: <p id="distanceTotal">0</p></li>
-               <li>Countries: <p id="countryTotal">0</p></li>
-               <li>Checkins: <p id="checkinTotal">0</p></li>
+                <li>
+
+                    <label class="switch">
+                        <input id="distance-checkbox" type="checkbox" checked>
+                        <div class="slider round"></div>
+                    </label>
+
+                    <div class="label-wrapper">Distance: <p id="distanceTotal">0</p></div>
+                </li>
+                <li>
+
+                    <label class="switch">
+                        <input id="countries-checkbox" type="checkbox" checked>
+                        <div class="slider round"></div>
+                    </label>
+
+                    <div class="label-wrapper">Countries: <p id="countryTotal">0</p></div>
+                </li>
+                <li>
+
+                    <label class="switch">
+                        <input id="checkins-checkbox" type="checkbox" checked>
+                        <div class="slider round"></div>
+                    </label>
+
+                    <div class="label-wrapper">Check-ins: <p id="checkinTotal">0</p></div>
+                </li>
             </ul>
         </div>
         

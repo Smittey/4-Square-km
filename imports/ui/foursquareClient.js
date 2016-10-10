@@ -66,34 +66,21 @@ foursquareApi = {
                     });
 
 
-                    //var marker = L.marker(mapVars.currentLocation).addTo(mapVars.markersGroup);
+                    var marker = L.marker(mapVars.currentLocation).addTo(mapVars.markersGroup);
 
-                    //marker.bindPopup(value.venue.name).openPopup();
+                    marker.bindPopup(value.venue.name).openPopup();
 
 
                     if (mapVars.previousLocation != null) {
 
-
-                        var control = L.Routing.control({
-                            waypoints: [
-                                L.latLng(mapVars.previousLocation[0], mapVars.previousLocation[1]),
-                                L.latLng(mapVars.currentLocation[0], mapVars.currentLocation[1])
-                            ],
-                            geocoder: L.Control.Geocoder.nominatim(),
-                            showAlternatives: false,
-                            router: L.Routing.mapbox('pk.eyJ1Ijoic21pdHRleSIsImEiOiJjaW80dGlsc3IwMDNvdXNrbmRtM3Zmd3J6In0.z0r08XD3wXm6AjIdNbwlKg')
-                        }).addTo(mapVars.mymap);
-
-                        L.Routing.errorControl(control).addTo(mapVars.mymap);
-
-                        /*var polyline = L.polyline([mapVars.previousLocation, mapVars.currentLocation],
+                        var polyline = L.polyline([mapVars.previousLocation, mapVars.currentLocation],
                             {
                                 color: 'red',
                                 weight: 2,
                                 opacity: 0.8,
                                 smoothFactor: 1
 
-                            }).addTo(mapVars.markersGroup);*/
+                            }).addTo(mapVars.lineGroup);
 
                         $('#distanceTotal').text(calculateDistance(mapVars.previousLocation, mapVars.currentLocation).toLocaleString() + "km");
                     }
@@ -115,10 +102,12 @@ foursquareApi = {
             //     foursquareApi.list((offsetStart + 250), 250);
             // } else {
 
-                //mapVars.mymap.addLayer(mapVars.markersGroup);
+                mapVars.mymap.addLayer(mapVars.markersGroup);
 
                 var bounds = new L.LatLngBounds(mapVars.latlngArr);
                 mapVars.mymap.fitBounds(bounds);
+                setCountryBoundaries();
+
 
                 $('#overlay').remove();
            // }
@@ -144,6 +133,52 @@ function loading() {
         '</div></div>';
 
     $(over).appendTo('body');
+}
+
+function setCountryBoundaries() {
+
+    mapVars.countryLayer = new L.GeoJSON();
+
+    mapVars.countryHoverDefaultStyle = {
+        color: "#07E00E",
+        weight: 2,
+        opacity: 0.6,
+        fillOpacity: 0.1,
+        fillColor: "#07E00E"
+    };
+    mapVars.countryHoverHighlightStyle = {
+        color: '#07E00E',
+        weight: 3,
+        opacity: 0.6,
+        fillOpacity: 0.65,
+        fillColor: '#07E00E'
+    };
+
+
+    var onEachFeature = function(feature, layer) {
+
+        if(mapVars.countriesArr.indexOf(feature.properties.name) != -1) {
+            layer.setStyle(mapVars.countryHoverDefaultStyle);
+
+            (function (layer, properties) {
+
+                layer.on("mouseover", function (e) {
+                    layer.setStyle(mapVars.countryHoverHighlightStyle);
+                });
+
+                layer.on("mouseout", function (e) {
+                    layer.setStyle(mapVars.countryHoverDefaultStyle);
+                });
+
+            })(layer, feature.properties);
+        }
+    };
+
+    mapVars.countryLayer = L.geoJson(boundaries, {
+        onEachFeature: onEachFeature
+    });
+
+    mapVars.mymap.addLayer(mapVars.countryLayer);
 }
 
 function getLatestVersion() {

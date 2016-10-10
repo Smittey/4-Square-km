@@ -10,11 +10,15 @@ mapVars = {
   countriesArr: [],
   countriesTotal: 0,
   markersGroup: null,
+  lineGroup: null,
   latlngArr: [],
   previousLocation: null,
   currentLocation: null,
   latestApiVersion: null,
-  code: null
+  code: null,
+  countryLayer: null,
+  countryHoverDefaultStyle: null,
+  countryHoverHighlightStyle: null
 };
 
 cookies = new Cookies();
@@ -53,14 +57,12 @@ Template.body.helpers({
 
 Template.map.onRendered(function(){
 
-
-
     L.Icon.Default.imagePath = Meteor.settings.public.leaflet.defaultMarker;
 
     //Create new cluster group to hold the markers
     mapVars.markersGroup = new L.markerClusterGroup();
+    mapVars.lineGroup = new L.GeoJSON();
 
-    //Create a new leaflet map
 
     //var currentLocation = getCurrentLocation.init();
     var currentLocation = null;
@@ -115,6 +117,27 @@ Template.body.events({
     },
     'click .home': function(){
         window.open(Meteor.absoluteUrl(), '_self');
+    },
+    'change #countries-checkbox': function(event) {
+        if(event.currentTarget.checked) {
+            mapVars.mymap.addLayer(mapVars.countryLayer);
+        } else {
+            mapVars.mymap.removeLayer(mapVars.countryLayer);
+        }
+    },
+    'change #checkins-checkbox': function(event) {
+        if(event.currentTarget.checked) {
+            mapVars.mymap.addLayer(mapVars.markersGroup);
+        } else {
+            mapVars.mymap.removeLayer(mapVars.markersGroup);
+        }
+    },
+    'change #distance-checkbox': function(event) {
+        if(event.currentTarget.checked) {
+            mapVars.mymap.addLayer(mapVars.lineGroup);
+        } else {
+            mapVars.mymap.removeLayer(mapVars.lineGroup);
+        }
     }
 });
 
@@ -166,6 +189,8 @@ function setMap(location) {
     }).addTo(mapVars.mymap);
 
     mapVars.mymap.addLayer(mapVars.markersGroup);
+    mapVars.mymap.addLayer(mapVars.lineGroup);
+
 
 }
 
