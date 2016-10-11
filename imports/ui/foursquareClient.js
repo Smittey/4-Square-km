@@ -98,9 +98,9 @@ foursquareApi = {
 
 
 
-            // if(mapVars.totalCheckinCount < totalCheckins) {
-            //     foursquareApi.list((offsetStart + 250), 250);
-            // } else {
+            if(mapVars.totalCheckinCount < totalCheckins) {
+                foursquareApi.list((offsetStart + 250), 250);
+            } else {
 
                 mapVars.mymap.addLayer(mapVars.markersGroup);
 
@@ -110,7 +110,7 @@ foursquareApi = {
 
 
                 $('#overlay').remove();
-           // }
+            }
 
         });
     },
@@ -143,7 +143,7 @@ function setCountryBoundaries() {
         color: "#07E00E",
         weight: 2,
         opacity: 0.6,
-        fillOpacity: 0.1,
+        fillOpacity: 0.2,
         fillColor: "#07E00E"
     };
     mapVars.countryHoverHighlightStyle = {
@@ -151,6 +151,13 @@ function setCountryBoundaries() {
         weight: 3,
         opacity: 0.6,
         fillOpacity: 0.65,
+        fillColor: '#07E00E'
+    };
+    mapVars.countryDefault = {
+        color: '#07E00E',
+        weight: 3,
+        opacity: 0,
+        fillOpacity: 0,
         fillColor: '#07E00E'
     };
 
@@ -170,9 +177,20 @@ function setCountryBoundaries() {
                     layer.setStyle(mapVars.countryHoverDefaultStyle);
                 });
 
+                layer.on({
+                    click: geoJsonClicked
+                });
+
             })(layer, feature.properties);
+        } else {
+            layer.setStyle(mapVars.countryDefault);
         }
     };
+
+    function geoJsonClicked(e) {
+        mapVars.mymap.fitBounds(e.layer.getBounds());
+    }
+
 
     mapVars.countryLayer = L.geoJson(boundaries, {
         onEachFeature: onEachFeature
