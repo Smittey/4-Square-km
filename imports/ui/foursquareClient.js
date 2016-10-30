@@ -38,11 +38,11 @@ foursquareApi = {
 
         var url = "https://api.foursquare.com/v2/users/self/checkins?" + "offset=" + offsetStart + "&limit=" + offsetEnd + "&oauth_token=" + cookies.get('authToken') + "&v=" + mapVars.latestApiVersion;
 
-        console.log("url", url);
+        //console.log("url", url);
 
         this.getJson(url, function (data) {
 
-            console.log("getting data ", data);
+            //console.log("getting data ", data);
 
             var setOfCheckins = data.response.checkins.items;
             var totalCheckins = data.response.checkins.count;
@@ -65,6 +65,7 @@ foursquareApi = {
                         iconAnchor: [12.5, 41]
                     });
 
+                    console.log(countryCode);
 
                     var marker = L.marker(mapVars.currentLocation).addTo(mapVars.markersGroup);
 
@@ -137,6 +138,8 @@ function loading() {
 
 function setCountryBoundaries() {
 
+    console.log(mapVars.countriesArr);
+
     mapVars.countryLayer = new L.GeoJSON();
 
     mapVars.countryHoverDefaultStyle = {
@@ -164,7 +167,9 @@ function setCountryBoundaries() {
 
     var onEachFeature = function(feature, layer) {
 
-        if(mapVars.countriesArr.indexOf(feature.properties.name) != -1) {
+        if(mapVars.countriesArr.some(function(v) { return feature.properties.name.indexOf(v) >= 0; })) {
+        //if(mapVars.countriesArr.indexOf(feature.properties.name) != -1) {
+        //if(feature.properties.name.includes(mapVars.countriesArr[length]) !=-1 ) {
             layer.setStyle(mapVars.countryHoverDefaultStyle);
 
             (function (layer, properties) {
@@ -177,8 +182,8 @@ function setCountryBoundaries() {
                     layer.setStyle(mapVars.countryHoverDefaultStyle);
                 });
 
-                layer.on({
-                    click: geoJsonClicked
+                layer.on("click", function (e) {
+                    mapVars.mymap.fitBounds(layer.getBounds());
                 });
 
             })(layer, feature.properties);
@@ -186,11 +191,6 @@ function setCountryBoundaries() {
             layer.setStyle(mapVars.countryDefault);
         }
     };
-
-    function geoJsonClicked(e) {
-        mapVars.mymap.fitBounds(e.layer.getBounds());
-    }
-
 
     mapVars.countryLayer = L.geoJson(boundaries, {
         onEachFeature: onEachFeature

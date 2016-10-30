@@ -53,7 +53,7 @@ body {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 50px;
+    /*height: 50px;*/
 }
 
 .fixed-top {
@@ -72,7 +72,8 @@ body {
     
 .top-bar ul li, .top-bar ul li p {
     color: #fff;
-    padding: 0rem 1rem;
+    /*padding: 0rem 1rem;*/
+    padding: 0.7rem 1rem;
     line-height: 1;
     display: inline-block
 }
@@ -86,6 +87,8 @@ body {
     height: 1em;
 }
 
+
+
 /*
 .menu .foursquare-login {
     padding: 0 !important;
@@ -94,7 +97,10 @@ body {
     line-height: 1;
 }*/
 
-
+.home {
+    font-size: 20px;
+    padding: 7px 0 5px 0 !important;
+}
 
 #overlay {
     position: absolute;
@@ -130,8 +136,8 @@ body {
     position: relative;
     display: inline-block;
     width: 25px;
-    height: 1em;
-
+    /*height: 1em;*/
+    margin-right: 5px;
 }
 
 .switch input {display:none;}
@@ -146,8 +152,7 @@ body {
     background-color: #ccc;
     -webkit-transition: .4s;
     transition: .4s;
-
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 
 .slider:before {
@@ -156,7 +161,7 @@ body {
     height: 1em;
     width: 1em;
     left: -4px;
-    bottom: -2px;
+    bottom: -3px;
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
