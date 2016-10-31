@@ -55,19 +55,31 @@ foursquareApi = {
                     mapVars.currentLocation = [value.venue.location.lat, value.venue.location.lng];
                     mapVars.latlngArr.push(mapVars.currentLocation);
 
-                    //console.log(JSON.stringify(value.venue.categories));
 
-                    var countryCode = value.venue.location.cc.toLowerCase();
-                    var countryCodeUrl = "http://www.geonames.org/flags/x/" + countryCode + ".gif";
+                    var marker;
 
-                    var countryIcon = L.icon({
-                        iconUrl: "http://www.geonames.org/flags/x/" + countryCode + ".gif",
-                        iconAnchor: [12.5, 41]
-                    });
+                    if(mapVars.totalCheckinCount == 0) {
+                        marker = L.icon({
+                            iconUrl: "http://besticons.net/sites/default/files/checker-flag-icon-5790.png",
+                            iconSize: [32, 32],
+                            iconAnchor:   [0, 32],
+                            popupAnchor:  [16, -32]
+                        });
+                        marker = L.marker(mapVars.currentLocation, {icon: marker}).addTo(mapVars.terminusMarkersGroup);
 
-                    console.log(countryCode);
+                    } else if(mapVars.totalCheckinCount == (totalCheckins - 1)) {
+                        marker = L.icon({
+                            iconUrl: "http://besticons.net/sites/default/files/green-flag-icon-680.png",
+                            iconSize: [50, 32],
+                            iconAnchor:   [25, 32],
+                            popupAnchor:  [12.5, -32]
+                        });
+                        marker = L.marker(mapVars.currentLocation, {icon: marker}).addTo(mapVars.terminusMarkersGroup);
 
-                    var marker = L.marker(mapVars.currentLocation).addTo(mapVars.markersGroup);
+                    } else {
+                        marker = L.marker(mapVars.currentLocation).addTo(mapVars.markersGroup);
+                    }
+
 
                     marker.bindPopup(value.venue.name).openPopup();
 
@@ -137,8 +149,6 @@ function loading() {
 }
 
 function setCountryBoundaries() {
-
-    console.log(mapVars.countriesArr);
 
     mapVars.countryLayer = new L.GeoJSON();
 

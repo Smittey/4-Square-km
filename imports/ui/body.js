@@ -10,6 +10,7 @@ mapVars = {
   countriesArr: [],
   countriesTotal: 0,
   markersGroup: null,
+  terminusMarkersGroup: null,
   lineGroup: null,
   latlngArr: [],
   previousLocation: null,
@@ -59,8 +60,9 @@ Template.map.onRendered(function(){
 
     L.Icon.Default.imagePath = Meteor.settings.public.leaflet.defaultMarker;
 
-    //Create new cluster group to hold the markers
+    //Create new cluster group to hold the markers and end points
     mapVars.markersGroup = new L.markerClusterGroup();
+    mapVars.terminusMarkersGroup = new L.LayerGroup();
     mapVars.lineGroup = new L.GeoJSON();
 
 
@@ -103,6 +105,7 @@ Template.body.events({
 
             //Clear layers and reset variables in case the user clicks the display check-ins button again
             mapVars.markersGroup.clearLayers();
+            mapVars.terminusMarkersGroup.clearLayers();
 
             //Reset the variables in the event of the user clicking the display button again
             initVars();
@@ -128,8 +131,10 @@ Template.body.events({
     'change #checkins-checkbox': function(event) {
         if(event.currentTarget.checked) {
             mapVars.mymap.addLayer(mapVars.markersGroup);
+            mapVars.mymap.addLayer(mapVars.terminusMarkersGroup);
         } else {
             mapVars.mymap.removeLayer(mapVars.markersGroup);
+            mapVars.mymap.removeLayer(mapVars.terminusMarkersGroup);
         }
     },
     'change #distance-checkbox': function(event) {
@@ -189,6 +194,7 @@ function setMap(location) {
     }).addTo(mapVars.mymap);
 
     mapVars.mymap.addLayer(mapVars.markersGroup);
+    mapVars.mymap.addLayer(mapVars.terminusMarkersGroup);
     mapVars.mymap.addLayer(mapVars.lineGroup);
 
 
