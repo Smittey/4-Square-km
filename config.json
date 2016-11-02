@@ -2,7 +2,8 @@
   "public": {
     "foursquare" : {
       "clientId": "",
-      "redirectUrl": ""
+      "redirectUrl": "",
+      "apiVersion": ""
     },
     "leaflet" : {
       "publicKey" : "",
