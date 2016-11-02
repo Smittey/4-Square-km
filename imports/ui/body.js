@@ -26,6 +26,7 @@ cookies = new Cookies();
 
 Template.body.onCreated(function () {
 
+
   //Initialize foundation
   $(document).foundation();
 
@@ -110,8 +111,8 @@ Template.body.events({
             //Reset the variables in the event of the user clicking the display button again
             initVars();
 
-            //Get todays date for the API call
-            mapVars.latestApiVersion = getLatestVersion();
+            //Get the last known good API version date for the API call
+            mapVars.latestApiVersion = Meteor.settings.public.foursquare.apiVersion;
 
             //GO!
             foursquareApi.init();
@@ -200,23 +201,6 @@ function setMap(location) {
 
 }
 
-function getLatestVersion() {
-
-    //Get todays date to be sent as a URL parameter to the foursquare API
-    var d = new Date();
-    var year = d.getFullYear();
-    var month = d.getMonth();
-    var day = d.getMonth();
-
-    if(month <10){
-        month = "0"+month;
-    }
-    if(day <10){
-        day = "0"+day;
-    }
-    return year+month+day;
-}
-
 function getCode() {
 
     //Use lookahead to obtain 'code' from the URL
@@ -234,15 +218,10 @@ function getCode() {
 }
 
 
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-var devCookie = "my websites cookie=123";
-if (document.cookie.indexOf(devCookie) === -1)
-{
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-74354041-5', 'auto');
-    ga('send', 'pageview');
-}
+ga('create', 'UA-74354041-5', 'auto');
+ga('send', 'pageview');
