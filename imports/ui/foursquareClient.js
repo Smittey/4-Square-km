@@ -81,7 +81,17 @@ foursquareApi = {
                     }
 
 
-                    marker.bindPopup(value.venue.name).openPopup();
+                    var date = new Date(value.createdAt);
+
+                    var formattedDate = (date.getMonth() + 1) + "/" +
+                        date.getDate() + "/" +
+                        date.getFullYear() + " " +
+                        date.getHours() + ":" +
+                        date.getMinutes() + ":" +
+                        date.getSeconds();
+
+
+                    marker.bindPopup("<b>" + formattedDate + "</b>" + "<br><br>" + value.venue.name).openPopup();
 
 
                     if (mapVars.previousLocation != null) {
@@ -93,10 +103,28 @@ foursquareApi = {
                                 opacity: 0.8,
                                 smoothFactor: 1
 
-                            }).addTo(mapVars.lineGroup);
+                            })
+                            .on('mouseover', function() {
+                                this.setStyle({
+                                    color: 'blue',
+                                    weight: 5
+                                });
+                            })
+                            .on('mouseout', function (e) {
+                                e.target.setStyle({
+                                    color: 'red',
+                                    weight: 1
+                                });
+                            })
+                            .addTo(mapVars.lineGroup);
 
                         $('#distanceTotal').text(calculateDistance(mapVars.previousLocation, mapVars.currentLocation).toLocaleString() + "km");
+
+
                     }
+
+
+
 
                     checkCountry(value.venue.location.country);
 
@@ -114,6 +142,8 @@ foursquareApi = {
             if(mapVars.totalCheckinCount < totalCheckins) {
                 foursquareApi.list((offsetStart + 250), 250);
             } else {
+
+
 
                 mapVars.mymap.addLayer(mapVars.markersGroup);
 
@@ -175,7 +205,7 @@ function setCountryBoundaries() {
     };
 
 
-    var onEachFeature = function(feature, layer) {
+    var onEachCountry = function(feature, layer) {
 
         if(mapVars.countriesArr.some(function(v) { return feature.properties.name.indexOf(v) >= 0; })) {
         //if(mapVars.countriesArr.indexOf(feature.properties.name) != -1) {
@@ -203,10 +233,11 @@ function setCountryBoundaries() {
     };
 
     mapVars.countryLayer = L.geoJson(boundaries, {
-        onEachFeature: onEachFeature
+        onEachFeature: onEachCountry
     });
 
     mapVars.mymap.addLayer(mapVars.countryLayer);
+    mapVars.countryLayer.bringToBack();
 }
 
 function getLatestVersion() {

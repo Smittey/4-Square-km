@@ -194,10 +194,11 @@ function setMap(location) {
         accessToken: Meteor.settings.public.leaflet.publicKey,
     }).addTo(mapVars.mymap);
 
-    mapVars.mymap.addLayer(mapVars.markersGroup);
-    mapVars.mymap.addLayer(mapVars.terminusMarkersGroup);
-    mapVars.mymap.addLayer(mapVars.lineGroup);
+     mapVars.mymap.addLayer(mapVars.markersGroup);
+     mapVars.mymap.addLayer(mapVars.terminusMarkersGroup);
+     mapVars.mymap.addLayer(mapVars.lineGroup);
 
+    //L.control.layers(mapVars.markersGroup, mapVars.terminusMarkersGroup, mapVars.lineGroup).addTo(mapVars.mymap);
 
 }
 
