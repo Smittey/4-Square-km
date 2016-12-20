@@ -24,11 +24,21 @@ mapVars = {
 
 cookies = new Cookies();
 
+
+Template.body.rendered=function() {
+    // $('#my-datepicker').datepicker();
+};
+
 Template.body.onCreated(function () {
 
 
   //Initialize foundation
   $(document).foundation();
+
+
+
+
+
 
    //Get the potential code from the URL
    mapVars.code = getCode();
@@ -58,6 +68,23 @@ Template.body.helpers({
 
 
 Template.map.onRendered(function(){
+
+    //$('#my-datepicker').datepicker();
+
+    var picker = new Pikaday({ field: $('#datepicker')[0] });
+    var picker = new Pikaday({ field: $('#datepicker1')[0] });
+
+
+    $("#sidebar").hover(
+        function() {
+            $(".overlay").css("display", "block");
+        },
+        function() {
+            $(".overlay").css("display", "none");
+        }
+    );
+
+
 
     L.Icon.Default.imagePath = Meteor.settings.public.leaflet.defaultMarker;
 

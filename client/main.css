@@ -89,6 +89,23 @@ body {
 
 
 
+#sidebar p {
+    display: inline-block;
+}
+
+#sidebar ul {
+    margin-left: 0rem;
+}
+
+#sidebar label {
+    color: #fff;
+}
+
+#sidebar .contents .fa {
+    margin-left: -1rem;
+    color: rgb(249,72,119);
+}
+
 /*
 .menu .foursquare-login {
     padding: 0 !important;
@@ -168,11 +185,11 @@ body {
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: rgb(249,72,119);
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px rgb(249,72,119);
 }
 
 input:checked + .slider:before {
@@ -194,3 +211,10 @@ input:checked + .slider:before {
 .label-wrapper {
     display: inline-block;
 }
+
+
+
+
+
+
+

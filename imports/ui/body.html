@@ -38,37 +38,7 @@
 
 
     <div class="top-bar fixed-bottom" id="main-menu">  
-        <div class="top-bar-left">
-            <ul class="menu" data-responsive-menu="drilldown medium-dropdown">
-                <li>
 
-                    <label class="switch">
-                        <input id="distance-checkbox" type="checkbox" checked>
-                        <div class="slider round"></div>
-                    </label>
-
-                    <div class="label-wrapper">Distance: <p id="distanceTotal">0</p></div>
-                </li>
-                <li>
-
-                    <label class="switch">
-                        <input id="countries-checkbox" type="checkbox" checked>
-                        <div class="slider round"></div>
-                    </label>
-
-                    <div class="label-wrapper">Countries: <p id="countryTotal">0</p></div>
-                </li>
-                <li>
-
-                    <label class="switch">
-                        <input id="checkins-checkbox" type="checkbox" checked>
-                        <div class="slider round"></div>
-                    </label>
-
-                    <div class="label-wrapper">Check-ins: <p id="checkinTotal">0</p></div>
-                </li>
-            </ul>
-        </div>
         
         <div class="top-bar-right">
             <ul class="dropdown menu" data-dropdown-menu>
@@ -78,7 +48,78 @@
     </div>
 
 
+
+    <div id="sidebar" class="in open" data-position="right">
+
+        <!--<div class="overlay"></div>-->
+
+        <div class="icons">
+            <div class="icon" data-content="beispiel1">
+                <i class="fa fa-cog fa-3x" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="contents">
+            <div class="content hide show" data-content="beispiel1">
+
+                <h5><i class="fa fa-map-marker" aria-hidden="true"></i>
+                    Check-ins</h5>
+
+                <div class="radio">
+                    <label><input type="radio" name="optradio" checked> All Check-ins</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="optradio">Date Range</label>
+                </div>
+
+                <input type="text" id="datepicker">
+                <span class="input">to</span>
+                <input type="text" id="datepicker1">
+
+                <hr>
+
+                <h5><i class="fa fa-cogs" aria-hidden="true"></i>
+                    Display Settings</h5>
+
+                <ul>
+                    <li>
+
+                        <label class="switch">
+                            <input id="distance-checkbox" type="checkbox" checked>
+                            <div class="slider round"></div>
+                        </label>
+
+                        <div class="label-wrapper">Distance: <p id="distanceTotal">0</p></div>
+                    </li>
+                    <li>
+
+                        <label class="switch">
+                            <input id="countries-checkbox" type="checkbox" checked>
+                            <div class="slider round"></div>
+                        </label>
+
+                        <div class="label-wrapper">Countries: <p id="countryTotal">0</p></div>
+                    </li>
+                    <li>
+
+                        <label class="switch">
+                            <input id="checkins-checkbox" type="checkbox" checked>
+                            <div class="slider round"></div>
+                        </label>
+
+                        <div class="label-wrapper">Check-ins: <p id="checkinTotal">0</p></div>
+                    </li>
+                </ul>
+
+
+            </div>
+        </div>
+    </div>
+
+
 </body>
+
+
+
 
 
 <template name="map">
