@@ -36,16 +36,12 @@ foursquareApi = {
     },
     list: function (offsetStart, offsetEnd) {
 
-        var baseUrl = "https://api.foursquare.com/v2/users/self/checkins?" + "offset=" + offsetStart + "&limit=" + offsetEnd + "&oauth_token=WJT0RDUQF2W55AZHKHL0ZRF1GSCANDNOUMV53RQFLCX55DE4&v=" + mapVars.latestApiVersion;
-        // var baseUrl = "https://api.foursquare.com/v2/users/self/checkins?" + "offset=" + offsetStart + "&limit=" + offsetEnd + "&oauth_token=" + cookies.get('authToken') + "&v=" + mapVars.latestApiVersion;
+        var baseUrl = "https://api.foursquare.com/v2/users/self/checkins?" + "offset=" + offsetStart + "&limit=" + offsetEnd + "&oauth_token=" + cookies.get('authToken') + "&v=" + mapVars.latestApiVersion;
 
         if($('input[name="checkin-radio"]:checked').attr('id') == 'radio-range') {
 
             var fromDate = new Date($('#datepicker').val()).valueOf()/1000;
             var toDate = new Date($('#datepicker1').val()).valueOf()/1000;
-
-            console.log("From: " + fromDate);
-            console.log("To: " + toDate);
 
             var rangeString = "&afterTimestamp=" + fromDate + "&beforeTimestamp=" + toDate;
 
@@ -55,17 +51,8 @@ foursquareApi = {
 
         this.getJson(baseUrl, function (data) {
 
-            //console.log("getting data ", data);
-            console.log(baseUrl);
-
             var setOfCheckins = data.response.checkins.items;
             var totalCheckins = data.response.checkins.count;
-
-            if($('input[name="checkin-radio"]:checked').attr('id') == 'radio-range') {
-
-            }
-
-
 
             $.each(setOfCheckins, function (index, value) {
 
@@ -110,8 +97,19 @@ foursquareApi = {
                         date.getMinutes() + ":" +
                         date.getSeconds();
 
+                    // specify popup options
+                    var customOptions = {
+                        'maxWidth': '500',
+                        'className' : 'custom'
+                    };
 
-                    marker.bindPopup("<b>" + formattedDate + "</b>" + "<br><br>" + value.venue.name).openPopup();
+                    var popupString= "<b>" + formattedDate + "</b>" + "<br><br>" + value.venue.name + "<br><br>";
+
+                    if(value.photos.count != 0) {
+                        popupString += "<img src='" + getImageFromCheckin(value.photos) + "' alt='Check-in picture' width='350px'/>";
+                    }
+
+                    marker.bindPopup(popupString, customOptions).openPopup();
 
 
                     if (mapVars.previousLocation != null) {
@@ -168,9 +166,13 @@ foursquareApi = {
                 mapVars.mymap.addLayer(mapVars.markersGroup);
 
                 var bounds = new L.LatLngBounds(mapVars.latlngArr);
-                mapVars.mymap.fitBounds(bounds);
-                setCountryBoundaries();
 
+                if(mapVars.totalCheckinCount != 0) {
+
+                    mapVars.mymap.fitBounds(bounds);
+                    setCountryBoundaries();
+
+                }
 
                 $('#overlay').remove();
             }
@@ -185,6 +187,11 @@ foursquareApi = {
     }
 };
 
+
+function getImageFromCheckin(photoObject) {
+
+    return photoObject.items[0].prefix + "original" + photoObject.items[0].suffix;
+}
 
 function loading() {
 

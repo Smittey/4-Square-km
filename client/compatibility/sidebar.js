@@ -7,8 +7,6 @@
  */
 $(document).ready(function() {
 
-    console.log('sidebar.js Geladen!!');
-
     var $sidebar = $.extend($('#sidebar'), {
         timeoutId: null,
         visible: false,

@@ -620,8 +620,6 @@
                 this._o.onSelect.call(this, this.getDate());
             }
 
-            console.log(this.getDate());
-            console.log(new Date(this.getDate()/1000).valueOf() );
         },
 
         /**
