@@ -36,16 +36,36 @@ foursquareApi = {
     },
     list: function (offsetStart, offsetEnd) {
 
-        var url = "https://api.foursquare.com/v2/users/self/checkins?" + "offset=" + offsetStart + "&limit=" + offsetEnd + "&oauth_token=" + cookies.get('authToken') + "&v=" + mapVars.latestApiVersion;
+        var baseUrl = "https://api.foursquare.com/v2/users/self/checkins?" + "offset=" + offsetStart + "&limit=" + offsetEnd + "&oauth_token=WJT0RDUQF2W55AZHKHL0ZRF1GSCANDNOUMV53RQFLCX55DE4&v=" + mapVars.latestApiVersion;
+        // var baseUrl = "https://api.foursquare.com/v2/users/self/checkins?" + "offset=" + offsetStart + "&limit=" + offsetEnd + "&oauth_token=" + cookies.get('authToken') + "&v=" + mapVars.latestApiVersion;
 
-        //console.log("url", url);
+        if($('input[name="checkin-radio"]:checked').attr('id') == 'radio-range') {
 
-        this.getJson(url, function (data) {
+            var fromDate = new Date($('#datepicker').val()).valueOf()/1000;
+            var toDate = new Date($('#datepicker1').val()).valueOf()/1000;
+
+            console.log("From: " + fromDate);
+            console.log("To: " + toDate);
+
+            var rangeString = "&afterTimestamp=" + fromDate + "&beforeTimestamp=" + toDate;
+
+            baseUrl += rangeString;
+        }
+
+
+        this.getJson(baseUrl, function (data) {
 
             //console.log("getting data ", data);
+            console.log(baseUrl);
 
             var setOfCheckins = data.response.checkins.items;
             var totalCheckins = data.response.checkins.count;
+
+            if($('input[name="checkin-radio"]:checked').attr('id') == 'radio-range') {
+
+            }
+
+
 
             $.each(setOfCheckins, function (index, value) {
 
@@ -81,7 +101,7 @@ foursquareApi = {
                     }
 
 
-                    var date = new Date(value.createdAt);
+                    var date = new Date(parseInt(value.createdAt)*1000);
 
                     var formattedDate = (date.getMonth() + 1) + "/" +
                         date.getDate() + "/" +
@@ -139,7 +159,7 @@ foursquareApi = {
 
 
 
-            if(mapVars.totalCheckinCount < totalCheckins) {
+            if(setOfCheckins.length != 0) {
                 foursquareApi.list((offsetStart + 250), 250);
             } else {
 
@@ -179,8 +199,6 @@ function loading() {
 }
 
 function setCountryBoundaries() {
-
-    mapVars.countryLayer = new L.GeoJSON();
 
     mapVars.countryHoverDefaultStyle = {
         color: "#07E00E",

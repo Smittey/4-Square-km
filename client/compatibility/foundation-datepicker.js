@@ -442,7 +442,11 @@
 
             if (opts.field) {
                 if (opts.bound) {
-                    document.body.appendChild(self.el);
+                    // document.body.appendChild(self.el);
+
+                    var div = document.getElementById('sidebar');
+                    div.appendChild(self.el);
+
                 } else {
                     opts.field.parentNode.insertBefore(self.el, opts.field.nextSibling);
                 }
@@ -615,6 +619,9 @@
             if (!preventOnSelect && typeof this._o.onSelect === 'function') {
                 this._o.onSelect.call(this, this.getDate());
             }
+
+            console.log(this.getDate());
+            console.log(new Date(this.getDate()/1000).valueOf() );
         },
 
         /**

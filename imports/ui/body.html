@@ -51,7 +51,6 @@
 
     <div id="sidebar" class="in open" data-position="right">
 
-        <!--<div class="overlay"></div>-->
 
         <div class="icons">
             <div class="icon" data-content="beispiel1">
@@ -65,15 +64,15 @@
                     Check-ins</h5>
 
                 <div class="radio">
-                    <label><input type="radio" name="optradio" checked> All Check-ins</label>
+                    <label><input type="radio" id="radio-all" name="checkin-radio" checked> All Check-ins</label>
                 </div>
                 <div class="radio">
-                    <label><input type="radio" name="optradio">Date Range</label>
+                    <label><input type="radio" id="radio-range" name="checkin-radio">Date Range</label>
                 </div>
 
-                <input type="text" id="datepicker">
+                <input type="text" id="datepicker" class="datepicker" disabled>
                 <span class="input">to</span>
-                <input type="text" id="datepicker1">
+                <input type="text" id="datepicker1" class="datepicker" disabled>
 
                 <hr>
 
@@ -113,6 +112,7 @@
 
             </div>
         </div>
+
     </div>
 
 

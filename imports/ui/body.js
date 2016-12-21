@@ -63,7 +63,15 @@ Template.body.helpers({
     connectedToFoursquare: function() {
         //Return the boolean state of the connection to the template
         return !Session.equals('authToken', "") && !Session.equals('authToken', undefined);
-    }
+    }//,
+    // checkinRange: function() {
+    //     radio-range
+    //     if(!document.getElementById('radio-range').checked) {
+    //         return "disabled";
+    //     } else {
+    //         return "";
+    //     }
+    // }
 });
 
 
@@ -75,16 +83,6 @@ Template.map.onRendered(function(){
     var picker = new Pikaday({ field: $('#datepicker1')[0] });
 
 
-    $("#sidebar").hover(
-        function() {
-            $(".overlay").css("display", "block");
-        },
-        function() {
-            $(".overlay").css("display", "none");
-        }
-    );
-
-
 
     L.Icon.Default.imagePath = Meteor.settings.public.leaflet.defaultMarker;
 
@@ -92,6 +90,7 @@ Template.map.onRendered(function(){
     mapVars.markersGroup = new L.markerClusterGroup();
     mapVars.terminusMarkersGroup = new L.LayerGroup();
     mapVars.lineGroup = new L.GeoJSON();
+    mapVars.countryLayer = new L.GeoJSON();
 
 
     //var currentLocation = getCurrentLocation.init();
@@ -134,6 +133,8 @@ Template.body.events({
             //Clear layers and reset variables in case the user clicks the display check-ins button again
             mapVars.markersGroup.clearLayers();
             mapVars.terminusMarkersGroup.clearLayers();
+            mapVars.lineGroup.clearLayers();
+            mapVars.countryLayer.clearLayers();
 
             //Reset the variables in the event of the user clicking the display button again
             initVars();
@@ -171,6 +172,15 @@ Template.body.events({
         } else {
             mapVars.mymap.removeLayer(mapVars.lineGroup);
         }
+    },
+    'click input:radio[name=checkin-radio]': function(event) {
+
+        if($(event.target).attr('id') == "radio-range") {
+            $('.datepicker').prop('disabled', false);
+        } else {
+            $('.datepicker').prop('disabled', true);
+        }
+
     }
 });
 
@@ -207,12 +217,13 @@ var getCurrentLocation = {
 function setMap(location) {
 
     if(location != undefined) {
-        mapVars.mymap = L.map('mapid').setView(location, 13);
+        mapVars.mymap = L.map('mapid', {zoomControl: true}).setView(location, 13);
 
     } else {
-        mapVars.mymap = L.map('mapid').setView([51.505, -0.09], 4);
+        mapVars.mymap = L.map('mapid', {zoomControl: true}).setView([51.505, -0.09], 4);
     }
 
+    mapVars.mymap.zoomControl.setPosition('topright');
 
     L.tileLayer(Meteor.settings.public.leaflet.tileUrl + '?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
