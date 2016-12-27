@@ -1,5 +1,6 @@
 import './body.html';
 import './body.js';
+import './feedback.js';
 
 var foursquareClientVars = {
     foursquareApi : null
@@ -36,148 +37,157 @@ foursquareApi = {
     },
     list: function (offsetStart, offsetEnd) {
 
-        var baseUrl = "https://api.foursquare.com/v2/users/self/checkins?" + "offset=" + offsetStart + "&limit=" + offsetEnd + "&oauth_token=" + cookies.get('authToken') + "&v=" + mapVars.latestApiVersion;
+        var error = false;
 
-        if($('input[name="checkin-radio"]:checked').attr('id') == 'radio-range') {
+        var baseUrl = "https://api.foursquare.com/v2/users/self/checkins?";
+
+        if($('input[name="checkin-radio"]:checked').attr('id') == 'radio-all') {
+
+            baseUrl += "offset=" + offsetStart + "&limit=" + offsetEnd + "&oauth_token=" + cookies.get('authToken') + "&v=" + mapVars.latestApiVersion;
+        }
+        else if($('input[name="checkin-radio"]:checked').attr('id') == 'radio-range' && ($('#datepicker').val() != "" && $('#datepicker1').val() != "")) {
 
             var fromDate = new Date($('#datepicker').val()).valueOf()/1000;
             var toDate = new Date($('#datepicker1').val()).valueOf()/1000;
 
             var rangeString = "&afterTimestamp=" + fromDate + "&beforeTimestamp=" + toDate;
 
-            baseUrl += rangeString;
+            baseUrl += "offset=" + offsetStart + "&limit=" + offsetEnd + "&oauth_token=" + cookies.get('authToken') + "&v=" + mapVars.latestApiVersion + rangeString;
+        } else {
+
+            error = true;
+            toastr.error("Please enter both a start date and end date if you want to view your check-ins for a date range", "Error");
         }
 
+        if(!error) {
+            this.getJson(baseUrl, function (data) {
 
-        this.getJson(baseUrl, function (data) {
+                var setOfCheckins = data.response.checkins.items;
+                var totalCheckins = data.response.checkins.count;
 
-            var setOfCheckins = data.response.checkins.items;
-            var totalCheckins = data.response.checkins.count;
+                $.each(setOfCheckins, function (index, value) {
 
-            $.each(setOfCheckins, function (index, value) {
+                    //To cover the rare case where foursquare has a malformed checkin with no 'venue' object
+                    if (value.hasOwnProperty('venue')) {
 
-                //To cover the rare case where foursquare has a malformed checkin with no 'venue' object
-                if(value.hasOwnProperty('venue')) {
-
-                    mapVars.currentLocation = [value.venue.location.lat, value.venue.location.lng];
-                    mapVars.latlngArr.push(mapVars.currentLocation);
-
-
-                    var marker;
-
-                    if(mapVars.totalCheckinCount == 0) {
-                        marker = L.icon({
-                            iconUrl: "http://besticons.net/sites/default/files/checker-flag-icon-5790.png",
-                            iconSize: [32, 32],
-                            iconAnchor:   [0, 32],
-                            popupAnchor:  [16, -32]
-                        });
-                        marker = L.marker(mapVars.currentLocation, {icon: marker}).addTo(mapVars.terminusMarkersGroup);
-
-                    } else if(mapVars.totalCheckinCount == (totalCheckins - 1)) {
-                        marker = L.icon({
-                            iconUrl: "http://besticons.net/sites/default/files/green-flag-icon-680.png",
-                            iconSize: [50, 32],
-                            iconAnchor:   [25, 32],
-                            popupAnchor:  [12.5, -32]
-                        });
-                        marker = L.marker(mapVars.currentLocation, {icon: marker}).addTo(mapVars.terminusMarkersGroup);
-
-                    } else {
-                        marker = L.marker(mapVars.currentLocation).addTo(mapVars.markersGroup);
-                    }
+                        mapVars.currentLocation = [value.venue.location.lat, value.venue.location.lng];
+                        mapVars.latlngArr.push(mapVars.currentLocation);
 
 
-                    var date = new Date(parseInt(value.createdAt)*1000);
+                        var marker;
 
-                    var formattedDate = (date.getMonth() + 1) + "/" +
-                        date.getDate() + "/" +
-                        date.getFullYear() + " " +
-                        date.getHours() + ":" +
-                        date.getMinutes() + ":" +
-                        date.getSeconds();
+                        if (mapVars.totalCheckinCount == 0) {
+                            marker = L.icon({
+                                iconUrl: "http://besticons.net/sites/default/files/checker-flag-icon-5790.png",
+                                iconSize: [32, 32],
+                                iconAnchor: [0, 32],
+                                popupAnchor: [16, -32]
+                            });
+                            marker = L.marker(mapVars.currentLocation, {icon: marker}).addTo(mapVars.terminusMarkersGroup);
 
-                    // specify popup options
-                    var customOptions = {
-                        'maxWidth': '500',
-                        'className' : 'custom'
-                    };
+                        } else if (mapVars.totalCheckinCount == (totalCheckins - 1)) {
+                            marker = L.icon({
+                                iconUrl: "http://besticons.net/sites/default/files/green-flag-icon-680.png",
+                                iconSize: [50, 32],
+                                iconAnchor: [25, 32],
+                                popupAnchor: [12.5, -32]
+                            });
+                            marker = L.marker(mapVars.currentLocation, {icon: marker}).addTo(mapVars.terminusMarkersGroup);
 
-                    var popupString= "<b>" + formattedDate + "</b>" + "<br><br>" + value.venue.name + "<br><br>";
-
-                    if(value.photos.count != 0) {
-                        popupString += "<img src='" + getImageFromCheckin(value.photos) + "' alt='Check-in picture' width='350px'/>";
-                    }
-
-                    marker.bindPopup(popupString, customOptions).openPopup();
+                        } else {
+                            marker = L.marker(mapVars.currentLocation).addTo(mapVars.markersGroup);
+                        }
 
 
-                    if (mapVars.previousLocation != null) {
+                        var date = new Date(parseInt(value.createdAt) * 1000);
 
-                        var polyline = L.polyline([mapVars.previousLocation, mapVars.currentLocation],
-                            {
-                                color: 'red',
-                                weight: 2,
-                                opacity: 0.8,
-                                smoothFactor: 1
+                        var formattedDate = (date.getMonth() + 1) + "/" +
+                            date.getDate() + "/" +
+                            date.getFullYear() + " " +
+                            date.getHours() + ":" +
+                            date.getMinutes() + ":" +
+                            date.getSeconds();
 
-                            })
-                            .on('mouseover', function() {
-                                this.setStyle({
-                                    color: 'blue',
-                                    weight: 5
-                                });
-                            })
-                            .on('mouseout', function (e) {
-                                e.target.setStyle({
+                        // specify popup options
+                        var customOptions = {
+                            'maxWidth': '500',
+                            'className': 'custom'
+                        };
+
+                        var popupString = "<b>" + formattedDate + "</b>" + "<br><br>" + value.venue.name + "<br><br>";
+
+                        if (value.photos.count != 0) {
+                            popupString += "<img src='" + getImageFromCheckin(value.photos) + "' alt='Check-in picture' width='350px'/>";
+                        }
+
+                        marker.bindPopup(popupString, customOptions).openPopup();
+
+
+                        if (mapVars.previousLocation != null) {
+
+                            var polyline = L.polyline([mapVars.previousLocation, mapVars.currentLocation],
+                                {
                                     color: 'red',
-                                    weight: 1
-                                });
-                            })
-                            .addTo(mapVars.lineGroup);
+                                    weight: 2,
+                                    opacity: 0.8,
+                                    smoothFactor: 1
 
-                        $('#distanceTotal').text(calculateDistance(mapVars.previousLocation, mapVars.currentLocation).toLocaleString() + "km");
+                                })
+                                .on('mouseover', function () {
+                                    this.setStyle({
+                                        color: 'blue',
+                                        weight: 5
+                                    });
+                                })
+                                .on('mouseout', function (e) {
+                                    e.target.setStyle({
+                                        color: 'red',
+                                        weight: 1
+                                    });
+                                })
+                                .addTo(mapVars.lineGroup);
 
+                            $('#distanceTotal').text(calculateDistance(mapVars.previousLocation, mapVars.currentLocation).toLocaleString() + "km");
+
+
+                        }
+
+
+                        checkCountry(value.venue.location.country);
+
+                        mapVars.previousLocation = mapVars.currentLocation;
+                    }
+
+                    mapVars.totalCheckinCount += 1;
+                    $('#checkinTotal').text(mapVars.totalCheckinCount);
+                    $('#countryTotal').text(mapVars.countriesTotal);
+
+                });
+
+
+                if (setOfCheckins.length != 0) {
+                    foursquareApi.list((offsetStart + 250), 250);
+                } else {
+
+
+                    mapVars.mymap.addLayer(mapVars.markersGroup);
+
+                    var bounds = new L.LatLngBounds(mapVars.latlngArr);
+
+                    if (mapVars.totalCheckinCount != 0) {
+
+                        mapVars.mymap.fitBounds(bounds);
+                        setCountryBoundaries();
 
                     }
 
-
-
-
-                    checkCountry(value.venue.location.country);
-
-                    mapVars.previousLocation = mapVars.currentLocation;
+                    $('#overlay').remove();
                 }
-
-                mapVars.totalCheckinCount += 1;
-                $('#checkinTotal').text(mapVars.totalCheckinCount);
-                $('#countryTotal').text(mapVars.countriesTotal);
 
             });
-
-
-
-            if(setOfCheckins.length != 0) {
-                foursquareApi.list((offsetStart + 250), 250);
-            } else {
-
-
-
-                mapVars.mymap.addLayer(mapVars.markersGroup);
-
-                var bounds = new L.LatLngBounds(mapVars.latlngArr);
-
-                if(mapVars.totalCheckinCount != 0) {
-
-                    mapVars.mymap.fitBounds(bounds);
-                    setCountryBoundaries();
-
-                }
-
-                $('#overlay').remove();
-            }
-
-        });
+        } else {
+            $('#overlay').remove();
+        }
     },
     init: function () {
 

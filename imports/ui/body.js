@@ -83,9 +83,6 @@ Template.map.onRendered(function(){
     var picker = new Pikaday({ field: $('#datepicker')[0] });
     var picker = new Pikaday({ field: $('#datepicker1')[0] });
 
-    toastr.error("Message", "Title");
-
-
     L.Icon.Default.imagePath = Meteor.settings.public.leaflet.defaultMarker;
 
     //Create new cluster group to hold the markers and end points
