@@ -83,3 +83,34 @@
   color: #DCDAD1;
   background-image: none;
 }
+
+
+
+form i {
+  left: 0px;
+  top: 23px;
+  border: none;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  float: left;
+  color: #29a038;
+}
+
+
+
+::-webkit-input-placeholder {
+    color: #333;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+    color: #333;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+    color: #333;
+}
+
+:-ms-input-placeholder {
+    color: #333;
+}

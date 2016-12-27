@@ -63,16 +63,21 @@
                 <h5><i class="fa fa-map-marker" aria-hidden="true"></i>
                     Check-ins</h5>
 
-                <div class="radio">
-                    <label><input type="radio" id="radio-all" name="checkin-radio" checked> All Check-ins</label>
-                </div>
-                <div class="radio">
-                    <label><input type="radio" id="radio-range" name="checkin-radio">Date Range</label>
-                </div>
+                <form>
 
-                <input type="text" id="datepicker" class="datepicker" disabled>
-                <span class="input">to</span>
-                <input type="text" id="datepicker1" class="datepicker" disabled>
+                    <div class="radio">
+                        <label><input type="radio" id="radio-all" name="checkin-radio" checked> All Check-ins</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" id="radio-range" name="checkin-radio">Date Range</label>
+                    </div>
+
+                    <!--<i class="fa fa-calendar" aria-hidden="true"></i>-->
+                    <input type="text" id="datepicker" placeholder="&#xf272;" style="font-family:Arial, FontAwesome" class="datepicker" disabled>
+                    <span class="input">to</span>
+                    <input type="text" id="datepicker1" placeholder="&#xf271;" style="font-family:Arial, FontAwesome" class="datepicker" disabled>
+
+                </form>
 
                 <hr>
 

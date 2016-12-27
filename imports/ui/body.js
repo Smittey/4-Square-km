@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 
 import './body.html';
 import './foursquareClient.js';
+import './feedback.js';
 
 mapVars = {
   mymap: null,
@@ -82,6 +83,7 @@ Template.map.onRendered(function(){
     var picker = new Pikaday({ field: $('#datepicker')[0] });
     var picker = new Pikaday({ field: $('#datepicker1')[0] });
 
+    toastr.error("Message", "Title");
 
 
     L.Icon.Default.imagePath = Meteor.settings.public.leaflet.defaultMarker;
