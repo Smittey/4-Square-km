@@ -21,7 +21,6 @@ autopublish@1.0.7             # Publish all data to the clients (for prototyping
 insecure@1.0.7                # Allow all DB writes from clients (for prototyping)
 
 
-#bevanhunt:leaflet
 zurb:foundation-sites@=6.1.2
 shell-server
 
@@ -33,13 +32,10 @@ session
 
 ostrio:cookies
 
-#fuatsengul:leaflet-routing-machines
-
 herrhelms:meteor-leaflet-markercluster
 
 force-ssl
 
-
-#richsilv:pikaday
-
 momentjs:moment
+
+chrismbeckett:toastr
